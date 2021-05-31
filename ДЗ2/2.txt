@@ -1,0 +1,74 @@
+Команды:
+
+Перемещение
+pwd - показать текущий каталог (его полный путь)
+cd Documents - сменить дир. на директорию Documents, находящуюся в текущей директории
+cd /usr/local/bin - сменить дир. на директорию, чей полный путь мы указали
+cd ~ / cd - вернуться в домашний каталог
+cd .. - вернуться в каталог уровнем выше
+ls - показать содержимое текущего каталога
+ls -l показать подробное содержимое текущго каталога (с датой изменения, владельцем и его группой и т.п.)
+ls -a показать в т.ч. скрытые директории и файлы в текущей директории
+ls / - показать содержимое корневого каталога
+
+В дальнейших командах можно использовать полный путь для операций вне текущего каталога:
+
+Создание файла
+touch name - создание пустого файла с именем name в текущем каталоге
+vim name - создание/открытие файла с именем name редактором Vim в текущем каталоге
+nano name - ~ редактором Nano в текущем каталоге
+
+Копирование файла или каталога
+cp file file2 - копирует файл с именем file в текущем каталоге, копию называет file2
+cp file /dir/ - копирует файл с именем file в текущем каталоге, копию помещает в подкаталог dir, название файла остается
+cp Documents/file . - копирует файл file из подкаталога Documents в текущий каталог
+cp -r Documents/subdir
+
+Создание каталога
+mkdir name - создать каталог name в текущем каталоге
+mkdir -p Folder1/Folder2 - создать каталог Folder1 с подкаталогом Folder2 в текущем каталоге
+
+Перемещение файлов или каталогов
+mv /user/file user1/file - перемещает файл file из каталога user в каталог user1
+
+Переименование
+mv file1 file2 - переименует файл или каталог file1 в file2 (находящийся в текущем каталоге)
+
+Удаление
+rm file1 - удаляет файл или каталог file1 (находящийся в текущем каталоге)
+
+Далее - пример операций с файлами и папками.
+
+user@user-VirtualBox:~/Documents$ ls /
+bin    dev   lib    libx32      mnt   root  snap      sys  var
+boot   etc   lib32  lost+found  opt   run   srv       tmp
+cdrom  home  lib64  media       proc  sbin  swapfile  usr
+user@user-VirtualBox:~/Documents$ touch testfile2
+user@user-VirtualBox:~/Documents$ ls
+emptyfile  testfile2
+user@user-VirtualBox:~/Documents$ vim myfile
+user@user-VirtualBox:~/Documents$ ls
+emptyfile  myfile  testfile2
+user@user-VirtualBox:~/Documents$ nano myfile2
+user@user-VirtualBox:~/Documents$ ls
+emptyfile  myfile  myfile2  testfile2
+user@user-VirtualBox:~/Documents$ cp myfile myfile_copy
+user@user-VirtualBox:~/Documents$ cp testfile2 testfile2_copy
+user@user-VirtualBox:~/Documents$ cat myfile2
+test string 1
+test string 2
+user@user-VirtualBox:~/Documents$ ls
+emptyfile  myfile  myfile2  myfile_copy  testfile2  testfile2_copy
+user@user-VirtualBox:~/Documents$ mkdir testfolder
+user@user-VirtualBox:~/Documents$ mkdir -p testfolder2/subdir
+user@user-VirtualBox:~/Documents$ ls
+emptyfile  myfile2      testfile2       testfolder
+myfile     myfile_copy  testfile2_copy  testfolder2
+user@user-VirtualBox:~/Documents$ cd testfolder2
+user@user-VirtualBox:~/Documents/testfolder2$ ls
+subdir
+user@user-VirtualBox:~/Documents/testfolder2$ cd
+user@user-VirtualBox:~$ cd Documents
+user@user-VirtualBox:~/Documents$ mv myfile2 testfolder2/subdir
+user@user-VirtualBox:~/Documents$ vim myfile
+user@user-VirtualBox:~/Documents$ nano myfile2
