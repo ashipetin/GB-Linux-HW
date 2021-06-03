@@ -1,0 +1,31 @@
+1 задание
+a. user@user-VirtualBox:~$ sudo useradd -s /bin/bash -d /home/testuser -m testuser1
+b. user@user-VirtualBox:~$ sudo userdel testuser1
+2 задание
+user@user-VirtualBox:~$ sudo groupadd newgroup # добавили группу
+user@user-VirtualBox:~$ nano /etc/group # проверяем, группа добавилась
+user@user-VirtualBox:~$ sudo usermod -aG newgroup testuser1 # добавили пользователя (а) в группу,  (G) не меняя его основной группы
+user@user-VirtualBox:~$ nano /etc/group # проверяем - пользователь в группе
+user@user-VirtualBox:~$ sudo addgroup newgroup2
+[sudo] password for user: 
+Adding group `newgroup2' (GID 1005) ...
+Done.
+user@user-VirtualBox:~$ sudo usermod -g newgroup2 testuser1
+user@user-VirtualBox:~$ id testuser1
+uid=1002(testuser1) gid=1005(newgroup2) groups=1005(newgroup2),1003(newgroup)
+#Группа пользователя изменена.
+user@user-VirtualBox:~$ sudo gpasswd -d testuser1 newgroup
+Removing user testuser1 from group newgroup
+user@user-VirtualBox:~$ id testuser1
+uid=1002(testuser1) gid=1005(newgroup2) groups=1005(newgroup2) # Удалили из группы
+3 задание
+user@user-VirtualBox:~$ sudo visudo
+#Добавляем строку в файл:
+"newsu ALL=(ALL) NOPASSWD:ALL"
+user@user-VirtualBox:~$ su newsu
+Password: 
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+newsu@user-VirtualBox:/home/user$ sudo groupadd new_group10
+newsu@user-VirtualBox:/home/user$ 
+#Команда выполнилась без ввода пароля.
