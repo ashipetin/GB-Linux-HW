@@ -1,0 +1,69 @@
+Задание 1,2
+
+user@user-VirtualBox:~$ sudo nano /etc/apt/source.list ## прописали адрес репозитория
+user@user-VirtualBox:~$ curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+
+Command 'curl' not found, but can be installed with:
+
+sudo snap install curl  # version 7.76.1, or
+sudo apt  install curl  # version 7.68.0-1ubuntu2.5
+
+See 'snap info curl' for additional versions.
+
+gpg: no valid OpenPGP data found.
+user@user-VirtualBox:~$ sudo snap install curl ## Установили пакет curl (задание 2)
+curl 7.76.1 from Wouter van Bommel (woutervb) installed
+user@user-VirtualBox:~$ curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+OK
+user@user-VirtualBox:~$ sudo apt install nginx -y
+Reading package lists... Done
+...
+## Установился
+user@user-VirtualBox:~$ sudo dpkg -r nginx
+(Reading database ... 170030 files and directories currently installed.)
+Removing nginx (1.18.0-0ubuntu1.2) ...
+## Удалился
+
+Задание 3
+
+Первоначальное решение (неправильное, как выяснилось)
+
+user@user-VirtualBox:~$ sudo iptables -A INPUT -j DROP
+user@user-VirtualBox:~$ sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -L INPUT -v -n
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+  148 39053 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+user@user-VirtualBox:~$ 
+
+
+Верное решение:
+
+user@user-VirtualBox:~$ sudo iptables -F
+user@user-VirtualBox:~$ sudo iptables -P INPUT DROP
+user@user-VirtualBox:~$ sudo iptables -P OUTPUT DROP
+user@user-VirtualBox:~$ sudo iptables -P FORWARD DROP
+user@user-VirtualBox:~$ sudo iptables -A INPUT -i lo -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -o lo -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A INPUT -p icmp -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -p icmp -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -p TCP -m tcp --sport 32769:61000 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -p UDP -m udp --sport 32769:61000 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A INPUT -p TCP -m state --state ESTABLISHED,RELATED -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A INPUT -p UDP -m state --state ESTABLISHED,RELATED -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -p tcp -m tcp --dport 22 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
+user@user-VirtualBox:~$ sudo iptables -L INPUT -v -n
+Chain INPUT (policy DROP 98 packets, 27053 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    7   569 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+    5   416 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    5   667 ACCEPT     udp  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22
+    0     0 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80

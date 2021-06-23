@@ -1,0 +1,19 @@
+1)
+user@user-VirtualBox:~$ echo 'test text' > echofile.txt
+user@user-VirtualBox:~$ cat echofile.txt
+test text
+user@user-VirtualBox:~$ cat /etc/* 2> errors.txt
+
+///вывод///
+
+user@user-VirtualBox:~$ ls
+Desktop    Downloads     errors.exe  Music   Pictures  Templates     Videos
+Documents  echofile.txt  errors.txt  myfile  Public    testfile.txt
+user@user-VirtualBox:~$ cat errors.txt
+
+///вывод: ошибки///
+
+2)
+user@user-VirtualBox:~$ ls -l | cut -d " " -f 1 | sort | uniq | grep -v "total"
+drwxr-xr-x
+-rw-rw-r--

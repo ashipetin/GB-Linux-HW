@@ -1,0 +1,129 @@
+Задание 1
+
+user@user-VirtualBox:~$ mkdir hw5
+user@user-VirtualBox:~$ cd hw5
+user@user-VirtualBox:~/hw5$ echo 'This is my first file' > file1
+user@user-VirtualBox:~/hw5$ ls
+file1
+user@user-VirtualBox:~/hw5$ cp file1 file2
+user@user-VirtualBox:~/hw5$ ls
+file1  file2
+user@user-VirtualBox:~/hw5$ cat file2
+This is my first file
+user@user-VirtualBox:~/hw5$ ln -s file1 file3
+user@user-VirtualBox:~/hw5$ ls
+file1  file2  file3
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user 22 июн 22 22:18 file1
+-rw-rw-r-- 1 user user 22 июн 22 22:18 file2
+lrwxrwxrwx 1 user user  5 июн 22 22:19 file3 -> file1
+user@user-VirtualBox:~/hw5$ ln file1 file4
+user@user-VirtualBox:~/hw5$ ls -li
+total 12
+393445 -rw-rw-r-- 2 user user 22 июн 22 22:18 file1
+393446 -rw-rw-r-- 1 user user 22 июн 22 22:18 file2
+393448 lrwxrwxrwx 1 user user  5 июн 22 22:19 file3 -> file1
+393445 -rw-rw-r-- 2 user user 22 июн 22 22:18 file4
+user@user-VirtualBox:~/hw5$ rm file1
+user@user-VirtualBox:~/hw5$ ls -li
+total 8
+393446 -rw-rw-r-- 1 user user 22 июн 22 22:18 file2
+393448 lrwxrwxrwx 1 user user  5 июн 22 22:19 file3 -> file1
+393445 -rw-rw-r-- 1 user user 22 июн 22 22:18 file4
+user@user-VirtualBox:~/hw5$ cat file3
+cat: file3: No such file or directory
+user@user-VirtualBox:~/hw5$ cat file4
+This is my first file
+
+Задание 2 
+
+user@user-VirtualBox:~/hw5$ mv file2 file2_2
+user@user-VirtualBox:~/hw5$ mv file3 file3_2
+user@user-VirtualBox:~/hw5$ mv file4 file4_2
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user 22 июн 22 22:18 file2_2
+lrwxrwxrwx 1 user user  5 июн 22 22:19 file3_2 -> file1
+-rw-rw-r-- 1 user user 22 июн 22 22:18 file4_2
+user@user-VirtualBox:~/hw5$ mkdir Task2
+user@user-VirtualBox:~/hw5$ ln -s file2_2 file2_2.link
+user@user-VirtualBox:~/hw5$ ls -l
+total 12
+-rw-rw-r-- 1 user user   22 июн 22 22:18 file2_2
+lrwxrwxrwx 1 user user    7 июн 22 22:28 file2_2.link -> file2_2
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+-rw-rw-r-- 1 user user   22 июн 22 22:18 file4_2
+drwxrwxr-x 2 user user 4096 июн 22 22:28 Task2
+user@user-VirtualBox:~/hw5$ mv file2_2.link Task2/
+user@user-VirtualBox:~/hw5$ mv file4_2 Task2/
+user@user-VirtualBox:~/hw5$ cd Task2
+user@user-VirtualBox:~/hw5/Task2$ ls -l
+total 4
+lrwxrwxrwx 1 user user  7 июн 22 22:28 file2_2.link -> file2_2
+-rw-rw-r-- 1 user user 22 июн 22 22:18 file4_2
+
+Задание 3
+
+ser@user-VirtualBox:~/hw5$ touch file1.txt file2.txt
+user@user-VirtualBox:~/hw5$ ls
+file1.txt  file2_2  file2.txt  file3_2  Task2
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file1.txt
+-rw-rw-r-- 1 user user   22 июн 22 22:18 file2_2
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ chmod 0 file*
+chmod: cannot operate on dangling symlink 'file3_2' /// вижу, что зацепил лишние файлы :-)
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+---------- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+---------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ chmod ug=rw,o=r file1.txt
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+---------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ chmod u=rw file2.txt
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+-rw------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ 
+user@user-VirtualBox:~/hw5$ chmod 0 file*
+chmod: cannot operate on dangling symlink 'file3_2'
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+---------- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+---------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ chmod 664 file1.txt
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+---------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+user@user-VirtualBox:~/hw5$ chmod 600 file2.txt
+user@user-VirtualBox:~/hw5$ ls -l
+total 8
+-rw-rw-r-- 1 user user    0 июн 22 22:31 file1.txt
+---------- 1 user user   22 июн 22 22:18 file2_2
+-rw------- 1 user user    0 июн 22 22:31 file2.txt
+lrwxrwxrwx 1 user user    5 июн 22 22:19 file3_2 -> file1
+drwxrwxr-x 2 user user 4096 июн 22 22:29 Task2
+
